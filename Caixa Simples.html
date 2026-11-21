@@ -1,0 +1,155 @@
+<!DOCTYPE html>
+<html lang="pt">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Caixa Simples</title>
+<style>
+:root{--bg:#f3f6f2;--card:#fff;--ink:#16241b;--mute:#5d6b61;--g:#0f5132;--gt:#fff;--y:#f2b01e;--r:#b3261e;--line:#d9e1da;box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){--bg:#101a14;--card:#18261d;--ink:#e8f0ea;--mute:#9db0a2;--g:#3fae7a;--gt:#08150d;--y:#f2b01e;--r:#ff8a80;--line:#2a3b30;color-scheme:dark}}
+:root[data-theme="dark"]{--bg:#101a14;--card:#18261d;--ink:#e8f0ea;--mute:#9db0a2;--g:#3fae7a;--gt:#08150d;--y:#f2b01e;--r:#ff8a80;--line:#2a3b30;color-scheme:dark}
+*{box-sizing:border-box}html{scroll-padding-top:env(safe-area-inset-top,0px)}
+body{margin:0;background:var(--bg);color:var(--ink);font:16px/1.4 system-ui,-apple-system,"Segoe UI",Roboto,sans-serif;padding-bottom:84px}
+header{background:#0f5132;color:#fff;padding:14px 16px;position:sticky;top:env(safe-area-inset-top,0px);z-index:5}
+header h1{margin:0;font-size:18px;letter-spacing:.2px;white-space:nowrap}header small{opacity:.85;font-size:12px;display:block;white-space:nowrap}
+main{max-width:560px;margin:0 auto;padding:14px}
+nav{position:fixed;bottom:0;left:0;right:0;background:var(--card);border-top:1px solid var(--line);display:flex;padding-bottom:env(safe-area-inset-bottom,0px);z-index:6}
+nav button{flex:1;border:0;background:none;color:var(--mute);padding:10px 2px;font-size:12px;font-weight:600}
+nav button b{display:block;font-size:20px}nav button.on{color:var(--g);box-shadow:inset 0 3px var(--g)}
+.card{background:var(--card);border:1px solid var(--line);border-radius:12px;padding:12px;margin-bottom:10px}
+h2{font-size:18px;margin:4px 0 10px}
+.grid{display:grid;grid-template-columns:1fr 1fr;gap:8px}
+.prod{background:var(--card);border:2px solid var(--line);border-radius:12px;padding:12px;text-align:left;color:var(--ink);font-size:15px}
+.prod.sel{border-color:var(--g)}.prod b{display:block}.prod span{color:var(--mute);font-size:13px}
+.low{color:var(--r)!important;font-weight:700}
+button.pri{background:var(--g);color:var(--gt);border:0;border-radius:10px;padding:13px 16px;font-size:16px;font-weight:700;width:100%}
+button.sec{background:none;border:2px solid var(--g);color:var(--g);border-radius:10px;padding:9px 12px;font-weight:700}
+button.wa{background:#1f9d55;color:#fff;border:0;border-radius:10px;padding:10px 12px;font-weight:700}
+button.x{background:none;border:0;color:var(--r);font-weight:700}
+input,select{width:100%;padding:12px;border:1px solid var(--line);border-radius:10px;background:var(--bg);color:var(--ink);font-size:16px;margin-bottom:8px}
+label{font-size:13px;color:var(--mute)}
+.row{display:flex;justify-content:space-between;align-items:center;gap:8px;padding:8px 0;border-bottom:1px solid var(--line)}.row:last-child{border:0}
+.pay{display:grid;grid-template-columns:1fr 1fr;gap:6px;margin:8px 0}
+.pay button{padding:10px;border:2px solid var(--line);background:var(--card);color:var(--ink);border-radius:10px;font-weight:600}.pay button.on{border-color:var(--g);background:var(--g);color:var(--gt)}
+.qty{display:flex;align-items:center;gap:10px}.qty button{width:36px;height:36px;border-radius:50%;border:2px solid var(--g);background:none;color:var(--g);font-size:20px;font-weight:700}
+.big{font-size:28px;font-weight:800}.pos{color:var(--g)}.neg{color:var(--r)}
+.mute{color:var(--mute);font-size:14px}.empty{text-align:center;color:var(--mute);padding:24px 8px}
+.bar{position:fixed;left:0;right:0;bottom:calc(58px + env(safe-area-inset-bottom,0px));padding:8px 14px;background:var(--bg);z-index:5}
+.bar .in{max-width:560px;margin:auto}
+.call{background:var(--y);color:#16241b;text-decoration:none;font-weight:800;border-radius:20px;padding:7px 10px;font-size:14px;white-space:nowrap;flex-shrink:0}
+header{display:flex;justify-content:space-between;align-items:center;gap:8px}
+.scan{position:fixed;inset:0;background:#000;z-index:20;display:flex;flex-direction:column;gap:10px;padding:12px}.scan video{flex:1;min-height:0;width:100%;object-fit:cover;border-radius:12px}
+.cod{display:flex;gap:8px;margin-bottom:10px}.cod input{margin:0}.cod button{white-space:nowrap}
+.toast{position:fixed;top:70px;left:50%;transform:translateX(-50%);background:var(--ink);color:var(--bg);padding:10px 16px;border-radius:20px;z-index:9;font-size:14px}
+</style>
+</head>
+<body>
+<header><div><h1>Caixa Simples</h1><small id="hd"></small></div><div style="display:flex;gap:6px"><a class="call" href="tel:+258878448802">📞 Ligar</a><a class="call" style="background:#1f9d55;color:#fff" href="https://wa.me/258867600679" target="_blank" rel="noopener">WhatsApp</a></div></header>
+<main id="app"></main>
+<nav id="nav"></nav>
+<script>
+var KEY="caixa-simples-v1",S={prods:[],sales:[],exps:[],next:1},tab="v",cart={},pay="din",last=null;
+try{var r=localStorage.getItem(KEY);if(r)S=JSON.parse(r)}catch(e){}
+function save(){try{localStorage.setItem(KEY,JSON.stringify(S))}catch(e){}}
+var $=function(i){return document.getElementById(i)};
+function mt(n){return Number(n||0).toLocaleString("pt-PT",{maximumFractionDigits:2})+" MT"}
+function id(){return S.next++}
+function esc(s){return String(s==null?"":s).replace(/[&<>"]/g,function(c){return{"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c]})}
+function day(t){var d=new Date(t);return d.getFullYear()+"-"+(d.getMonth()+1)+"-"+d.getDate()}
+function isToday(t){return day(t)===day(Date.now())}
+function hora(t){return new Date(t).toLocaleTimeString("pt-PT",{hour:"2-digit",minute:"2-digit"})}
+function tel(p){p=String(p||"").replace(/\D/g,"");return p.length===9?"258"+p:p}
+function wa(num,txt){window.open("https://wa.me/"+(num?tel(num):"")+"?text="+encodeURIComponent(txt),"_blank")}
+function toast(m){var t=document.createElement("div");t.className="toast";t.textContent=m;document.body.appendChild(t);setTimeout(function(){t.remove()},2200)}
+var TABS=[["v","🛒","Vender"],["s","📦","Stock"],["d","💸","Despesas"],["f","🤝","Dívidas"],["h","📊","Dia"]];
+function go(t){tab=t;last=null;draw()}
+function draw(){
+ $("nav").innerHTML=TABS.map(function(t){return '<button class="'+(t[0]===tab?"on":"")+'" onclick="go(\''+t[0]+'\')"><b>'+t[1]+'</b>'+t[2]+'</button>'}).join("");
+ $("hd").textContent=new Date().toLocaleDateString("pt-PT",{weekday:"long",day:"numeric",month:"long"});
+ var f={v:vVender,s:vStock,d:vDesp,f:vDiv,h:vDia}[tab];$("app").innerHTML=f();window.scrollTo(0,0);
+}
+/* VENDER */
+function vVender(){
+ if(last)return recibo();
+ if(!S.prods.length)return '<div class="empty">Ainda não tem produtos.<br><br><button class="pri" onclick="go(\'s\')">Adicionar o primeiro produto</button></div>';
+ var tot=cartTotal(),n=Object.keys(cart).length;
+ var h='<div class="cod"><input id="cod" placeholder="Código de barras" inputmode="numeric" onkeydown="if(event.key===\'Enter\')byCode(this.value)"><button class="sec" onclick="openScan(byCode)">📷 Ler</button></div><h2>Toque no produto para vender</h2><div class="grid">'+S.prods.map(function(p){
+  var q=cart[p.id]||0;return '<button class="prod '+(q?"sel":"")+'" onclick="add('+p.id+')"><b>'+esc(p.n)+(q?' × '+q:'')+'</b><span>'+mt(p.p)+'</span><br><span class="'+(p.q<=p.m?"low":"")+'">'+(p.q<=0?"Sem stock":p.q+" em stock")+'</span></button>'}).join("")+'</div>';
+ if(n){h+='<div class="card" style="margin-top:12px">'+Object.keys(cart).map(function(k){var p=prod(k);return '<div class="row"><span>'+esc(p.n)+'</span><span class="qty"><button onclick="sub('+k+')">−</button><b>'+cart[k]+'</b><button onclick="add('+k+')">+</button></span></div>'}).join("")+
+  '<div class="pay">'+[["din","Dinheiro"],["mp","M-Pesa"],["em","e-Mola"],["div","Dívida"]].map(function(x){return '<button class="'+(pay===x[0]?"on":"")+'" onclick="pay=\''+x[0]+'\';draw()">'+x[1]+'</button>'}).join("")+'</div>'+
+  (pay==="div"?'<input id="cn" placeholder="Nome do cliente"><input id="ct" type="tel" placeholder="Telemóvel (ex. 84 123 4567)">':'')+'</div>';
+  h+='<div class="bar"><div class="in"><button class="pri" onclick="finish()">Registar venda · '+mt(tot)+'</button></div></div>'}
+ return h}
+function prod(i){return S.prods.filter(function(p){return p.id==i})[0]}
+function cartTotal(){return Object.keys(cart).reduce(function(a,k){return a+prod(k).p*cart[k]},0)}
+function add(i){var p=prod(i);if((cart[i]||0)>=p.q){toast("Sem mais stock de "+p.n);return}cart[i]=(cart[i]||0)+1;draw()}
+function sub(i){cart[i]--;if(cart[i]<=0)delete cart[i];draw()}
+function finish(){
+ var nm="",ph="";if(pay==="div"){nm=$("cn").value.trim();ph=$("ct").value.trim();if(!nm){toast("Escreva o nome do cliente");return}}
+ var items=Object.keys(cart).map(function(k){var p=prod(k);p.q-=cart[k];return{n:p.n,q:cart[k],p:p.p,c:p.c||0}});
+ var s={id:id(),t:Date.now(),items:items,total:cartTotal(),pay:pay,cli:nm,tel:ph,paid:pay!=="div"};
+ S.sales.push(s);save();cart={};last=s.id;pay="din";draw()}
+var PN={din:"Dinheiro",mp:"M-Pesa",em:"e-Mola",div:"Dívida"};
+function recibo(){
+ var s=S.sales.filter(function(x){return x.id===last})[0];
+ return '<div class="card"><h2>✅ Venda registada</h2>'+s.items.map(function(i){return '<div class="row"><span>'+i.q+' × '+esc(i.n)+'</span><b>'+mt(i.q*i.p)+'</b></div>'}).join("")+
+ '<div class="row"><b>Total</b><b class="big">'+mt(s.total)+'</b></div><div class="mute">'+PN[s.pay]+(s.cli?' · '+esc(s.cli):'')+'</div></div>'+
+ '<button class="wa" style="width:100%;margin-bottom:8px" onclick="sendRec('+s.id+')">Enviar recibo por WhatsApp</button><button class="pri" onclick="go(\'v\')">Nova venda</button>'}
+function sendRec(i){var s=S.sales.filter(function(x){return x.id===i})[0];
+ wa(s.tel,"*Recibo*\n"+new Date(s.t).toLocaleDateString("pt-PT")+" "+hora(s.t)+"\n"+s.items.map(function(x){return x.q+" × "+x.n+" = "+mt(x.q*x.p)}).join("\n")+"\n*Total: "+mt(s.total)+"*\nPagamento: "+PN[s.pay]+(s.pay==="div"?" (por pagar)":"")+"\nObrigado!")}
+/* STOCK */
+function vStock(){
+ var h='<div class="card"><h2>Novo produto</h2><div class="cod"><input id="pk" placeholder="Código de barras / QR (opcional)"><button class="sec" onclick="openScan(fillK)">📷 Ler</button></div><input id="pn" placeholder="Nome (ex. Arroz 1kg)"><input id="pp" type="number" inputmode="decimal" placeholder="Preço de venda (MT)"><input id="pc" type="number" inputmode="decimal" placeholder="Preço de custo (MT) — opcional"><input id="pq" type="number" inputmode="numeric" placeholder="Quantidade em stock"><input id="pm" type="number" inputmode="numeric" placeholder="Avisar quando restar (ex. 5)"><button class="pri" onclick="addProd()">Guardar produto</button></div><h2>Os seus produtos</h2>';
+ if(!S.prods.length)return h+'<div class="empty">Sem produtos ainda.</div>';
+ return h+'<div class="card">'+S.prods.map(function(p){return '<div class="row"><div><b>'+esc(p.n)+'</b><div class="mute">'+mt(p.p)+'</div></div><div class="qty"><span class="'+(p.q<=p.m?"low":"")+'">'+p.q+(p.q<=p.m?" ⚠ a acabar":"")+'</span><button onclick="stk('+p.id+',1)">+</button><button onclick="stk('+p.id+',-1)">−</button><button class="x" onclick="delProd('+p.id+')">✕</button></div></div>'}).join("")+'</div>'}
+function addProd(){var n=$("pn").value.trim(),p=parseFloat($("pp").value);if(!n||!(p>0)){toast("Preencha nome e preço");return}
+ S.prods.push({id:id(),k:$("pk").value.trim(),n:n,p:p,c:parseFloat($("pc").value)||0,q:parseInt($("pq").value)||0,m:$("pm").value===""?3:parseInt($("pm").value)});save();toast("Produto guardado");draw()}
+function stk(i,d){var p=prod(i);p.q=Math.max(0,p.q+d);save();draw()}
+function delProd(i){if(confirm("Apagar este produto?")){S.prods=S.prods.filter(function(p){return p.id!==i});save();draw()}}
+/* LEITOR */
+var stream=null,scanTimer=null;
+function byCode(c){c=String(c||"").trim();if(!c)return;var p=S.prods.filter(function(x){return x.k===c})[0];if(!p){toast("Código não registado. Adicione em Stock.");return}add(p.id);toast(p.n+" adicionado")}
+function openScan(cb){
+ if(!navigator.mediaDevices||!window.BarcodeDetector){toast("Este telemóvel não lê pela câmara. Escreva o código ou use um leitor.");return}
+ var o=document.createElement("div");o.id="so";o.className="scan";o.innerHTML='<video id="sv" playsinline muted></video><button class="pri" onclick="closeScan()">Fechar</button>';document.body.appendChild(o);
+ navigator.mediaDevices.getUserMedia({video:{facingMode:"environment"}}).then(function(s){stream=s;var v=$("sv");v.srcObject=s;v.play();var d=new BarcodeDetector();scanTimer=setInterval(function(){d.detect(v).then(function(r){if(r.length){var c=r[0].rawValue;closeScan();cb(c)}}).catch(function(){})},300)}).catch(function(){closeScan();toast("Permita o acesso à câmara")})}
+function fillK(c){$("pk").value=c}
+function closeScan(){clearInterval(scanTimer);if(stream)stream.getTracks().forEach(function(t){t.stop()});stream=null;var o=$("so");if(o)o.remove()}
+/* DESPESAS */
+function vDesp(){
+ var h='<div class="card"><h2>Registar despesa</h2><input id="ed" placeholder="O que pagou? (ex. Transporte)"><input id="ev" type="number" inputmode="decimal" placeholder="Valor (MT)"><button class="pri" onclick="addExp()">Guardar despesa</button></div><h2>Despesas de hoje</h2>';
+ var l=S.exps.filter(function(e){return isToday(e.t)});if(!l.length)return h+'<div class="empty">Nenhuma despesa hoje.</div>';
+ return h+'<div class="card">'+l.map(function(e){return '<div class="row"><span>'+esc(e.d)+'<div class="mute">'+hora(e.t)+'</div></span><span><b>'+mt(e.v)+'</b> <button class="x" onclick="delExp('+e.id+')">✕</button></span></div>'}).join("")+'</div>'}
+function addExp(){var d=$("ed").value.trim(),v=parseFloat($("ev").value);if(!d||!(v>0)){toast("Preencha descrição e valor");return}S.exps.push({id:id(),t:Date.now(),d:d,v:v});save();toast("Despesa guardada");draw()}
+function delExp(i){S.exps=S.exps.filter(function(e){return e.id!==i});save();draw()}
+/* DIVIDAS */
+function vDiv(){
+ var l=S.sales.filter(function(s){return s.pay==="div"&&!s.paid});
+ var tot=l.reduce(function(a,s){return a+s.total},0);
+ var h='<div class="card"><div class="mute">Total que lhe devem</div><div class="big neg">'+mt(tot)+'</div></div>';
+ if(!l.length)return h+'<div class="empty">Ninguém lhe deve nada. 🎉</div>';
+ return h+l.map(function(s){var dias=Math.floor((Date.now()-s.t)/864e5);return '<div class="card"><div class="row"><b>'+esc(s.cli)+'</b><b class="neg">'+mt(s.total)+'</b></div><div class="mute">'+s.items.map(function(i){return i.q+"× "+esc(i.n)}).join(", ")+' · há '+dias+' dia(s)</div><div style="display:flex;gap:8px;margin-top:8px"><button class="wa" onclick="lembrar('+s.id+')">Lembrar</button><button class="sec" onclick="recebi('+s.id+')">Já pagou</button></div></div>'}).join("")}
+function lembrar(i){var s=S.sales.filter(function(x){return x.id===i})[0];wa(s.tel,"Olá "+s.cli+", lembrete amigável: tem "+mt(s.total)+" por pagar ("+s.items.map(function(x){return x.q+" "+x.n}).join(", ")+", de "+new Date(s.t).toLocaleDateString("pt-PT")+"). Pode pagar por M-Pesa ou e-Mola. Obrigado!")}
+function recebi(i){var s=S.sales.filter(function(x){return x.id===i})[0];s.paid=true;s.paidAt=Date.now();save();toast("Pagamento registado");draw()}
+/* DIA */
+function calc(from){
+ var vs=S.sales.filter(function(s){return s.t>=from}),ex=S.exps.filter(function(e){return e.t>=from});
+ var v=0,custo=0,fiado=0,met={din:0,mp:0,em:0,div:0};
+ vs.forEach(function(s){v+=s.total;met[s.pay]+=s.total;s.items.forEach(function(i){custo+=i.c*i.q});if(s.pay==="div"&&!s.paid)fiado+=s.total});
+ var rec=S.sales.filter(function(s){return s.pay==="div"&&s.paid&&s.paidAt>=from&&s.t<from}).reduce(function(a,s){return a+s.total},0);
+ var d=ex.reduce(function(a,e){return a+e.v},0);
+ return{n:vs.length,v:v,met:met,fiado:fiado,rec:rec,d:d,lucro:v-custo-d,caixa:v-fiado+rec-d}}
+function startDay(){var d=new Date();d.setHours(0,0,0,0);return d.getTime()}
+function vDia(){
+ var c=calc(startDay()),low=S.prods.filter(function(p){return p.q<=p.m});
+ var h='<div class="card"><h2>Fecho do dia</h2><div class="row"><span>Vendas ('+c.n+')</span><b>'+mt(c.v)+'</b></div><div class="row"><span class="mute">Dinheiro</span><span>'+mt(c.met.din)+'</span></div><div class="row"><span class="mute">M-Pesa</span><span>'+mt(c.met.mp)+'</span></div><div class="row"><span class="mute">e-Mola</span><span>'+mt(c.met.em)+'</span></div><div class="row"><span class="mute">Dívida (a receber)</span><span class="neg">'+mt(c.met.div)+'</span></div><div class="row"><span>Despesas</span><b>'+mt(c.d)+'</b></div><div class="row"><span>Dinheiro que deve ter na mão</span><b>'+mt(c.caixa)+'</b></div><div class="row"><span>Lucro do dia</span><b class="big '+(c.lucro>=0?"pos":"neg")+'">'+mt(c.lucro)+'</b></div></div>';
+ if(low.length)h+='<div class="card"><b class="low">⚠ A acabar</b><div>'+low.map(function(p){return esc(p.n)+" ("+p.q+")"}).join(", ")+'</div></div>';
+ h+='<button class="wa" style="width:100%;margin-bottom:8px" onclick="resumo(1)">Enviar fecho do dia no WhatsApp</button><button class="sec" style="width:100%;margin-bottom:8px" onclick="resumo(7)">Resumo da semana no WhatsApp</button>';
+ h+='<div class="card"><h2>Vendas de hoje</h2>'+(S.sales.filter(function(s){return isToday(s.t)}).reverse().map(function(s){return '<div class="row"><span>'+hora(s.t)+' · '+PN[s.pay]+'<div class="mute">'+s.items.map(function(i){return i.q+"× "+esc(i.n)}).join(", ")+'</div></span><b>'+mt(s.total)+'</b></div>'}).join("")||'<div class="empty">Ainda sem vendas.</div>')+'</div>';
+ return h+'<p class="mute" style="text-align:center">Os dados ficam guardados neste telemóvel.</p>'}
+function resumo(n){var f=n===1?startDay():startDay()-6*864e5,c=calc(f);
+ wa("",(n===1?"*Fecho do dia*":"*Resumo dos últimos 7 dias*")+"\nVendas: "+mt(c.v)+" ("+c.n+")\nDespesas: "+mt(c.d)+"\n*Lucro: "+mt(c.lucro)+"*\nPor receber (dívidas): "+mt(S.sales.filter(function(s){return s.pay==="div"&&!s.paid}).reduce(function(a,s){return a+s.total},0)))}
+draw();
+</script>
+</body>
+</html>
